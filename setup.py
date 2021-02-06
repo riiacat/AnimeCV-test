@@ -12,6 +12,7 @@ torchvision
 tensorboardX
 tqdm
 webcolors
+timm @ git+https://github.com/rwightman/pytorch-image-models.git
 """
 
 setup(

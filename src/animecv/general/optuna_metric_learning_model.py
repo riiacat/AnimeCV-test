@@ -4,6 +4,7 @@ import os
 import torch
 import torch.nn as nn
 from torchvision import transforms, models
+import timm
 
 from ..module import Similarity, ImageEncoder
 
@@ -25,10 +26,15 @@ def load_OML_ImageFolder_models(model_dir):
     with open(os.path.join(model_dir, "conf.json")) as h:
         CONF, PARAMS = json.load(h)
     
-    assert CONF["trunk_model"] in MODEL_CLASSES
-    trunk = MODEL_CLASSES[CONF["trunk_model"]](pretrained=True)
-    trunk_output_size = trunk.fc.in_features
-    trunk.fc = nn.Identity()
+    if CONF["trunk_model"] in MODEL_CLASSES:
+        trunk = MODEL_CLASSES[CONF["trunk_model"]](pretrained=True)
+        trunk_output_size = trunk.fc.in_features
+        trunk.fc = nn.Identity()
+    elif CONF["trunk_model"].startswith("timm:"):
+        _model_name = CONF["trunk_model"][5:]
+        trunk = timm.create_model(_model_name, pretrained=True)
+        trunk.reset_classifier(0)
+        trunk_output_size = trunk.num_features
 
     embedder = nn.Sequential(
         nn.Linear(trunk_output_size, CONF["dim"]),
@@ -56,9 +62,13 @@ class OML_ImageFolder_Pretrained(nn.Module):
         return x
 
 def create_OML_ImageFolder_Encoder(model_dir):
+    with open(os.path.join(model_dir, "conf.json")) as h:
+        CONF, PARAMS = json.load(h)
+
+    input_size = CONF["input_size"]
     transform = [
-        transforms.Resize((224,224)),
-        transforms.CenterCrop(224),
+        transforms.Resize((input_size,input_size)),
+        transforms.CenterCrop(input_size),
         transforms.ToTensor(),
         transforms.Normalize(
             mean=[0.485, 0.456, 0.406],
