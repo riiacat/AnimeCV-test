@@ -12,7 +12,7 @@ pip install git+https://github.com/kosuke1701/AnimeCV.git
 
 ## Features
 
-### Character re-identification
+### Near Human-Level Character Identification
 
 The task is to identify which character is depicted in a picture given a set of reference pictures for each character.
 [Example code](examples/character_re_identification.py)
@@ -20,6 +20,12 @@ The task is to identify which character is depicted in a picture given a set of 
 * **Update on 2021.01.11**
   - I released new pre-trained model for character face embedding!
   - See [release](https://github.com/kosuke1701/AnimeCV/releases/tag/0111_best_randaug) and demo  [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/kosuke1701/AnimeCV/blob/master/examples/demo_oml.ipynb).
+* **Update on 2021.02.07**
+  - I released new pre-trained models for character face embedding.
+  - The models are trained on [ZACI-20](https://github.com/kosuke1701/ZACI-20-dataset), a public zero-shot character identification dataset.
+  - **The best model achieves near human-level performance with only 1.5 times larger error rate than that of humans.**
+  - You can load this model by using `animecv.general.create_OML_ImageFolder_Encoder(model_directory_name)`.
+  - Download models from [release](https://github.com/kosuke1701/AnimeCV/releases/tag/0111_best_randaug).
 
 ### Object detection
 
