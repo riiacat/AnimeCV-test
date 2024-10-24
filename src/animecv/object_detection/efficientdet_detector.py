@@ -65,7 +65,7 @@ class YetAnotherEfficientDetDetector(BoundingBoxDetector):
             ret += [
                 [
                     {
-                        "coordinates": tuple(out_image["rois"][j].astype(np.int)),
+                        "coordinates": tuple(out_image["rois"][j].astype(int)),
                         "class": class_lst[out_image["class_ids"][j]],
                         "score": out_image["scores"][j]
                     }
